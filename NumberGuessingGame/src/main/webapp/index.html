@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fdffcd;
+            text-align: center;
+            color: #333;
+            padding-top: 50px;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            width: 350px;
+            margin: auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: #ff7b54;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: center;
+            border: 2px solid #ffcab0;
+            border-radius: 8px;
+            outline: none;
+            background: white;
+            color: #333;
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        button {
+            background: #ffcab0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #ff9b82;
+            transform: scale(1.05);
+        }
+
+        #restart {
+            display: none;
+            background: #ff7b54;
+        }
+
+        #restart:hover {
+            background: #ff5233;
+        }
+
+        p {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        span {
+            color: #ff7b54;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎯 Number Guessing Game</h1>
+        <p>Guess a number between <b>1 and 100</b>.</p>
+        <input type="number" id="userGuess" placeholder="Enter your guess" min="1" max="100">
+        <button onclick="checkGuess()">Guess</button>
+        <p id="message"></p>
+        <p>Attempts Left: <span id="attempts">10</span></p>
+        <p>Score: <span id="score">100</span></p>
+        <button id="restart" onclick="restartGame()">Restart</button>
+    </div>
+
+    <script>
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let attemptsLeft = 10;
+        let score = 100;
+
+        function checkGuess() {
+            let userGuess = parseInt(document.getElementById("userGuess").value);
+            let message = document.getElementById("message");
+            let attemptsText = document.getElementById("attempts");
+            let scoreText = document.getElementById("score");
+
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.innerHTML = "⚠️ Please enter a number between 1 and 100!";
+                return;
+            }
+
+            attemptsLeft--;
+            attemptsText.innerText = attemptsLeft;
+            score -= 10;
+
+            if (userGuess === randomNumber) {
+                message.innerHTML = `🎉 Correct! You guessed the number in ${10 - attemptsLeft} attempts!`;
+                document.getElementById("restart").style.display = "block";
+            } else if (userGuess < randomNumber) {
+                message.innerHTML = "🔼 Too low! Try again.";
+            } else {
+                message.innerHTML = "🔽 Too high! Try again.";
+            }
+
+            scoreText.innerText = score;
+
+            if (attemptsLeft === 0 && userGuess !== randomNumber) {
+                message.innerHTML = `❌ Game Over! The number was ${randomNumber}.`;
+                document.getElementById("restart").style.display = "block";
+            }
+        }
+
+        function restartGame() {
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+            attemptsLeft = 10;
+            score = 100;
+            
+            document.getElementById("userGuess").value = "";
+            document.getElementById("message").innerHTML = "";
+            document.getElementById("attempts").innerText = attemptsLeft;
+            document.getElementById("score").innerText = score;
+            document.getElementById("restart").style.display = "none";
+        }
+    </script>
+</body>
+</html>
